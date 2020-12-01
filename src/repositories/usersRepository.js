@@ -9,13 +9,14 @@ async function create(userParams){
 }
 
 async function findByEmail(email){
-    const result = connection.query(`SELECT * FROM users WHERE email = $1`,[email]);
-    return result.rows[0];
+    const {rows} = await connection.query(`SELECT * FROM users WHERE email = $1`,[email]);
+    if(rows.length){
+        return rows[0];
+    } else return false;
 }
-
 async function getUserDataByEmail(email){
     const user = findByEmail(email);
-    const {id,name,email} = user;
+    const {id,name} = user;
     return {id,name,email};
 }
 

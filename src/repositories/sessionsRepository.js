@@ -3,7 +3,7 @@ const connection = require("../database");
 
 async function createByUserId(userId) {
   const token = uuidv4();
-  await connection.query(`INSERT INTO sessions ("userId",token) VALUES ($1,$2)`,[userId,token])
+  await connection.query(`INSERT INTO sessions (user_id,token) VALUES ($1,$2)`,[userId,token])
   return {userId,token};
 }
 

@@ -27,11 +27,12 @@ async function postSignIn(req,res){
 
     try{
         const user = await usersRepository.findByEmail(userParams.email);
-
-        if(! (user || bcrypt.compareSync(userParams.password,user.password))){
+        if(!user){
             return res.status(401).send({error: 'Wrong email or password'});
         }
-
+        if(!bcrypt.compareSync(userParams.password,user.password)){
+            return res.status(401).send({error: 'Wrong email or password'});
+        }
         const {token} = await sessionsRepository.createByUserId(user.id);
         const userData = filterUserData(user);
 
@@ -45,4 +46,9 @@ async function postSignIn(req,res){
 function filterUserData(user){
     const {id,name,email} = user;
     return {id,name,email};
+}
+
+module.exports = {
+    postSignIn,
+    postSignUp
 }
