@@ -15,7 +15,7 @@ async function findByEmail(email){
     } else return false;
 }
 async function getUserDataByEmail(email){
-    const user = findByEmail(email);
+    const user = await findByEmail(email);
     const {id,name} = user;
     return {id,name,email};
 }

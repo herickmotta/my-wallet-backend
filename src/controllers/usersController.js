@@ -7,7 +7,11 @@ async function postSignUp(req,res){
     const userParams = req.body;
     const {error} = userSchemas.signUp.validate(userParams);
     if(error) return res.status(422).send({error: error.details[0].message});
-    //check if email is unique
+    
+    const checkEmailUnique = await usersRepository.findByEmail(userParams.email);
+    if (checkEmailUnique){
+        return res.sendStatus(409);
+    }
     userParams.password = bcrypt.hashSync(userParams.password,12);
 
     try{
