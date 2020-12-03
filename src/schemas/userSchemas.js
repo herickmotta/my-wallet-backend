@@ -12,6 +12,8 @@ const signUp = Joi.object({
     confirmPassword: Joi.ref('password'),
 });
 
+
+
 module.exports = {
     signIn,
     signUp

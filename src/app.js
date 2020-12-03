@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const userController = require('./controllers/usersController');
+const registerController = require('./controllers/registerController');
+const authMiddleware = require('./middlewares/authMiddleware');
 app.use(cors());
 app.use(express.json());
 
@@ -9,6 +11,10 @@ app.use(express.json());
 app.post('/api/users/sign-up',userController.postSignUp);
 app.post('/api/users/sign-in',userController.postSignIn);
 
+
+//Register routes
+app.post('/api/new/',authMiddleware,registerController.postRegister);
+app.get('/', authMiddleware, registerController.getUserRegisters);
 const port = 3000;
 
 app.listen(port, () => {

@@ -7,6 +7,14 @@ async function create(userParams){
     const userData = await getUserDataByEmail(email);
     return userData;
 }
+async function findById(id){
+    console.log(id);
+    const {rows} = await connection.query(`SELECT * FROM users WHERE id = $1`,[id]);
+    console.log(rows);
+    if(rows.length){
+        return rows[0];
+    } else return false;
+}
 
 async function findByEmail(email){
     const {rows} = await connection.query(`SELECT * FROM users WHERE email = $1`,[email]);
@@ -23,5 +31,6 @@ async function getUserDataByEmail(email){
 module.exports = {
     create,
     findByEmail,
-    getUserDataByEmail
+    getUserDataByEmail,
+    findById
 }
