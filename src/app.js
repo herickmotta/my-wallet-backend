@@ -11,7 +11,7 @@ app.use(express.json());
 app.post('/api/users/sign-up',userController.postSignUp);
 app.post('/api/users/sign-in',userController.postSignIn);
 app.get('/api/users/',authMiddleware,userController.getUserInfo);
-
+app.post("/api/users/sign-out", authMiddleware, userController.postSignOut);
 
 //Register routes
 app.post('/api/new/',authMiddleware,registerController.postRegister);

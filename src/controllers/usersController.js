@@ -48,6 +48,11 @@ async function postSignIn(req,res){
     }
 }
 
+async function postSignOut(req, res) {
+    await sessionsRepository.destroyByUserId(req.user.id);
+    return res.sendStatus(200);
+}
+
 async function getUserInfo(req,res){
     try{
         const user = await findById(req.user.id);
@@ -65,5 +70,6 @@ function filterUserData(user){
 module.exports = {
     postSignIn,
     postSignUp,
-    getUserInfo
+    getUserInfo,
+    postSignOut
 }

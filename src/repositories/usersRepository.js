@@ -27,9 +27,11 @@ async function getUserDataByEmail(email){
     return {id,name,email,balance};
 }
 
+
 module.exports = {
     create,
     findByEmail,
     getUserDataByEmail,
-    findById
+    findById,
+    
 }

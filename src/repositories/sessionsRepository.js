@@ -12,8 +12,8 @@ async function findByToken(token) {
   return rows[0];
 }
 
-async function destroyByUserId(userId) {
-  await connection.query(`DELETE FROM sessions WHERE userId=$1`,[userId]);
+async function destroyByUserId(user_id) {
+  await connection.query(`DELETE FROM sessions WHERE user_id=$1`,[user_id]);
 }
 
 module.exports = { createByUserId, findByToken, destroyByUserId };
