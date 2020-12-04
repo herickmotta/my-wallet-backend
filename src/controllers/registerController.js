@@ -9,7 +9,7 @@ async function postRegister(req,res){
     if(error) return res.status(422).send({error: error.details[0].message});
 
     try{
-        const register = await createRegister(registerParams);
+        const register = await createRegister({...registerParams,user_id:req.user.id});
         res.status(201).send(register);
     }catch(e){
         console.log(e);

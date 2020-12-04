@@ -14,7 +14,7 @@ app.post('/api/users/sign-in',userController.postSignIn);
 
 //Register routes
 app.post('/api/new/',authMiddleware,registerController.postRegister);
-app.get('/', authMiddleware, registerController.getUserRegisters);
+app.get('/api/', authMiddleware, registerController.getUserRegisters);
 const port = 3000;
 
 app.listen(port, () => {
