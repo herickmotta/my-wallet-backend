@@ -2,6 +2,7 @@ const userSchemas = require('../schemas/userSchemas');
 const usersRepository = require('../repositories/usersRepository');
 const sessionsRepository = require('../repositories/sessionsRepository');
 const bcrypt = require('bcrypt');
+const { findById } = require('../repositories/usersRepository');
 
 async function postSignUp(req,res){
     const userParams = req.body;
@@ -47,12 +48,22 @@ async function postSignIn(req,res){
     }
 }
 
+async function getUserInfo(req,res){
+    try{
+        const user = await findById(req.user.id);
+        return res.send(user);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+}
 function filterUserData(user){
-    const {id,name,email} = user;
-    return {id,name,email};
+    const {id,name,email,balance} = user;
+    return {id,name,email,balance};
 }
 
 module.exports = {
     postSignIn,
-    postSignUp
+    postSignUp,
+    getUserInfo
 }

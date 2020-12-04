@@ -10,9 +10,8 @@ async function create(userParams){
 async function findById(id){
     console.log(id);
     const {rows} = await connection.query(`SELECT * FROM users WHERE id = $1`,[id]);
-    console.log(rows);
     if(rows.length){
-        return rows[0];
+        return {id,name,email,balance} = rows[0];
     } else return false;
 }
 
@@ -24,8 +23,8 @@ async function findByEmail(email){
 }
 async function getUserDataByEmail(email){
     const user = await findByEmail(email);
-    const {id,name} = user;
-    return {id,name,email};
+    const {id,name,balance} = user;
+    return {id,name,email,balance};
 }
 
 module.exports = {
