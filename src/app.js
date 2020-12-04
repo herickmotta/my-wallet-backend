@@ -14,11 +14,7 @@ app.get('/api/users/',authMiddleware,userController.getUserInfo);
 app.post("/api/users/sign-out", authMiddleware, userController.postSignOut);
 
 //Register routes
-app.post('/api/new/',authMiddleware,registerController.postRegister);
-app.get('/api/', authMiddleware, registerController.getUserRegisters);
+app.post('/api/registers/new',authMiddleware,registerController.postRegister);
+app.get('/api/registers', authMiddleware, registerController.getUserRegisters);
 
-const port = 3000;
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+module.exports = app;
