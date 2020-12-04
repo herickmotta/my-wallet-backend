@@ -6,7 +6,6 @@ async function postRegister(req,res){
     const registerParams = req.body;
 
     const {error} = registerSchemas.register.validate(registerParams);
-    console.log(error);
     if(error) return res.status(422).send({error: error.details[0].message});
 
     try{
