@@ -8,8 +8,8 @@ beforeAll(async () => {
     await connection.query('DELETE FROM sessions');
 
     await supertest(app).post('/api/users/sign-up').send({
-        name: 'herick',
-        email: 'herick@gmail.com',
+        name: 'test',
+        email: 'test@gmail.com',
         password: '123456',
         confirmPassword: '123456'
     });
@@ -27,7 +27,7 @@ describe('POST /registers/new', () => {
     
     it('should return 201 when create register', async () => {
         const res = await supertest(app).post('/api/users/sign-in').send({
-            email: 'herick@gmail.com',
+            email: 'test@gmail.com',
             password: '123456'
         });
         const token = res.body.token;
@@ -48,7 +48,7 @@ describe('GET /registers', () => {
     
     it('should return 201 when get user registers', async () => {
         const res = await supertest(app).post('/api/users/sign-in').send({
-            email: 'herick@gmail.com',
+            email: 'test@gmail.com',
             password: '123456'
         });
         const token = res.body.token;

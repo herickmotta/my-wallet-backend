@@ -16,8 +16,8 @@ afterAll(async () => {
 describe('POST /sign-up', () => {
     it('should return 201 when signUp new user', async () => {
         const body = {
-            name: 'herick',
-            email: 'herick@gmail.com',
+            name: 'test',
+            email: 'test@gmail.com',
             password: '123456',
             confirmPassword: '123456'
         }
@@ -29,8 +29,8 @@ describe('POST /sign-up', () => {
 describe('POST /sign-in', () => {
     beforeEach(async () => {
         await supertest(app).post('/api/sign-up').send({
-            name: 'herick',
-            email: 'herick@gmail.com',
+            name: 'test',
+            email: 'test@gmail.com',
             password: '123456',
             confirmPassword: '123456'
         });
@@ -38,7 +38,7 @@ describe('POST /sign-in', () => {
 
     it('should return 200 when try signIn', async () => {
         const body = {
-            email: 'herick@gmail.com',
+            email: 'test@gmail.com',
             password: '123456'
         }
         const response = await supertest(app).post('/api/users/sign-in').send(body);
