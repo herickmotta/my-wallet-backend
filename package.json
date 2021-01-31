@@ -22,6 +22,8 @@
     "joy": "^0.1.1",
     "nodemon": "^2.0.6",
     "pg": "^8.5.1",
+    "sequelize": "^6.5.0",
+    "sequelize-cli": "^6.2.0",
     "supertest": "^6.0.1",
     "uuid": "^8.3.1"
   },
