@@ -1,9 +1,9 @@
 const { Sequelize } = require('sequelize');
 const sequelize = require('../database');
 
-class Session extends Sequelize.Model {}
+class Transaction extends Sequelize.Model { }
 
-Session.init(
+Transaction.init(
   {
     id: {
       type: Sequelize.INTEGER,
@@ -15,7 +15,15 @@ Session.init(
       type: Sequelize.INTEGER,
       allowNulll: false,
     },
-    token: {
+    description: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    value: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    type: {
       type: Sequelize.STRING,
       allowNull: false,
     },
@@ -24,8 +32,8 @@ Session.init(
   },
   {
     sequelize,
-    modelName: 'session',
+    modelName: 'transaction',
   },
 );
 
-module.exports = Session;
+module.exports = Transaction;

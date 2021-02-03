@@ -1,79 +1,49 @@
 const bcrypt = require('bcrypt');
-const userSchemas = require('../schemas/userSchemas');
-const usersRepository = require('../repositories/usersRepository');
-const sessionsRepository = require('../repositories/sessionsRepository');
-const { findById } = require('../repositories/usersRepository');
+const ConflictError = require('../errors/ConflictError');
+const NotFoundError = require('../errors/NotFoundError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
+const Session = require('../models/Session');
+const Transaction = require('../models/Transaction');
+const User = require('../models/User');
+const sessionsController = require('./sessionsController');
 
-async function postSignUp(req, res) {
-  const userParams = req.body;
-  const { error } = userSchemas.signUp.validate(userParams);
-  if (error) return res.status(422).send({ error: error.details[0].message });
+class UsersController {
+  static async signUp(userParams) {
+    const { name, email, password } = userParams;
+    const emailExist = await User.findOne({ where: { email } });
+    if (emailExist) throw new ConflictError();
 
-  const checkEmailUnique = await usersRepository.findByEmail(userParams.email);
-  if (checkEmailUnique) {
-    return res.sendStatus(409);
+    const hashedPassword = bcrypt.hashSync(password, 12);
+    await User.create({ name, email, hashedPassword });
   }
-  userParams.password = bcrypt.hashSync(userParams.password, 12);
 
-  try {
-    const user = await usersRepository.create(userParams);
-    return res.status(201).send(user);
-  } catch (e) {
-    console.log(e);
-    return res.sendStatus(500);
+  static async signIn(userParams) {
+    const { email, password } = userParams;
+
+    const user = User.findOne({ where: { email } });
+    if (!user) throw new UnauthorizedError();
+
+    const match = bcrypt.compareSync(password, user.password);
+    if (!match) throw new UnauthorizedError();
+
+    await sessionsController.create(user.id);
+
+    return user;
   }
-}
 
-async function postSignIn(req, res) {
-  const userParams = req.body;
+  static async signOut(userId) {
+    await Session.destroy({ where: { userId } });
+  }
 
-  const { error } = userSchemas.signIn.validate(userParams);
-  if (error) return res.status(422).send({ error: error.details[0].message });
-
-  try {
-    const user = await usersRepository.findByEmail(userParams.email);
-    if (!user) {
-      return res.status(401).send({ error: 'Wrong email or password' });
-    }
-    if (!bcrypt.compareSync(userParams.password, user.password)) {
-      return res.status(401).send({ error: 'Wrong email or password' });
-    }
-    const { token } = await sessionsRepository.createByUserId(user.id);
-    const userData = filterUserData(user);
-
-    return res.send({ ...userData, token });
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(500);
+  static async getUserById(userId) {
+    const user = await User.findOne({
+      where: { id: userId },
+      attributes: ['email', 'name'],
+      include: Transaction,
+    });
+    if (!user) throw new NotFoundError();
+    return user;
   }
 }
 
-async function postSignOut(req, res) {
-  await sessionsRepository.destroyByUserId(req.user.id);
-  return res.sendStatus(200);
-}
-
-async function getUserInfo(req, res) {
-  try {
-    const user = await findById(req.user.id);
-    return res.send(user);
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(500);
-  }
-}
-function filterUserData(user) {
-  const {
-    id, name, email, balance,
-  } = user;
-  return {
-    id, name, email, balance,
-  };
-}
-
-module.exports = {
-  postSignIn,
-  postSignUp,
-  getUserInfo,
-  postSignOut,
-};
+module.exports = new UsersController();
