@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon ./src/server.js",
+    "build": "npx sequelize-cli db:migrate",
     "start": "node ./src/server.js",
     "test": "npx jest -i"
   },
