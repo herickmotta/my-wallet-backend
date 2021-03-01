@@ -3,20 +3,20 @@ const NotFoundError = require('../errors/NotFoundError');
 const Session = require('../models/Session');
 
 class SessionsController {
-  static async create(userId) {
+  create(userId) {
     const token = uuidv4();
-    await Session.create({ userId, token });
+    return Session.create({ userId, token });
   }
 
-  static async getSessionById(id) {
+  async getSessionById(id) {
     const session = await Session.findByPk(id);
-    if (!session) throw new NotFoundError();
+    if (!session) throw new NotFoundError('Session not found');
     return session;
   }
 
-  static async getSessionByToken(token) {
+  async getSessionByToken(token) {
     const session = await Session.findOne({ where: { token } });
-    if (!session) throw new NotFoundError();
+    if (!session) throw new NotFoundError('Session not found');
     return session;
   }
 }

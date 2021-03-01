@@ -13,12 +13,7 @@ const signUp = Joi.object({
   confirmPassword: Joi.ref('password'),
 });
 
-const signOut = Joi.object({
-  id: Joi.required(),
-});
-
 module.exports = {
   signIn,
   signUp,
-  signOut,
 };

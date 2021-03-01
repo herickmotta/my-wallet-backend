@@ -6,12 +6,12 @@ const NotFoundError = require('../errors/NotFoundError');
 
 async function authMiddleware(req, res, next) {
   const authHeader = req.header('Authorization');
-  if (!authHeader) throw new AuthHeaderError();
+  if (!authHeader) throw new AuthHeaderError('authorization token not found');
   const token = authHeader.replace('Bearer ', '');
   const session = await sessionsController.getSessionByToken(token);
-  if (!session) throw new InvalidTokenError();
+  if (!session) throw new InvalidTokenError('token is invalid');
   const user = await usersController.getUserById(session.userId);
-  if (!user) return new NotFoundError();
+  if (!user) return new NotFoundError('user not found');
 
   req.user = user;
   req.session = session;

@@ -22,11 +22,8 @@ router.get('/', authMiddleware, async (req, res) => {
   res.send(req.user);
 });
 
-router.post('/sign-out', async (req, res) => {
-  const { error } = userSchemas.signOut.validate(req.body);
-  if (error) throw error;
-
-  await usersController.signOut(req.body);
+router.post('/sign-out', authMiddleware, async (req, res) => {
+  await usersController.signOut(req.user.id);
   res.sendStatus(200);
 });
 
