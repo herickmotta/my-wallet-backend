@@ -8,7 +8,7 @@ router.post('/sign-up', async (req, res) => {
   if (error) throw error;
   await usersController.signUp(req.body);
 
-  res.status(201);
+  res.sendStatus(201);
 });
 
 router.post('/sign-in', async (req, res) => {

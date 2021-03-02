@@ -3,14 +3,16 @@ const supertest = require('supertest');
 const sequelize = require('../../src/database');
 const app = require('../../src/app');
 
-const cleatDataBase = async () => {
-  await sequelize.query('DELETE FROM transactions;');
+const clearDataBase = async () => {
   await sequelize.query('DELETE FROM sessions;');
+
+  await sequelize.query('DELETE FROM transactions;');
+
   await sequelize.query('DELETE FROM users;');
 };
 
 beforeEach(async () => {
-  await cleatDataBase();
+  await clearDataBase();
   const body = {
     name: 'test',
     email: 'test@gmail.com',
@@ -21,7 +23,7 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await cleatDataBase();
+  await clearDataBase();
   await sequelize.close();
 });
 
@@ -42,8 +44,8 @@ describe('POST /transactions/new', () => {
   });
 });
 
-describe('GET /transatcions', () => {
-  it('should return 200 when get user registers', async () => {
+describe('GET /transactions', () => {
+  it('should return 200 when get user transactions', async () => {
     const res = await supertest(app).post('/api/users/sign-in').send({
       email: 'test@gmail.com',
       password: '123456',
