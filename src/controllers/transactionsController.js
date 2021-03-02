@@ -8,7 +8,13 @@ class TransactionsController {
     const user = await User.findByPk(userId);
     if (!user) throw new NotFoundError('User not found');
     const transaction = await Transaction.create(transactionParams);
-    user.balance += transaction.value;
+
+    if (transactionParams.type === 'input') {
+      user.balance += transaction.value;
+    } else {
+      user.balance -= transaction.value;
+    }
+
     user.save();
 
     return transaction;
